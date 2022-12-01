@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anvancedpush;
+package org.example.killbill.plugin.advancedpush;
 
 import lombok.extern.slf4j.Slf4j;
 import org.killbill.billing.notification.plugin.api.ExtBusEvent;

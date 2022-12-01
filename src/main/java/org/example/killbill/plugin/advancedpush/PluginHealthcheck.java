@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anvancedpush;
+package org.example.killbill.plugin.advancedpush;
 
 import org.killbill.billing.osgi.api.Healthcheck;
 import org.killbill.billing.tenant.api.Tenant;
