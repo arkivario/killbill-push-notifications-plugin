@@ -8,7 +8,7 @@ import org.killbill.billing.osgi.libs.killbill.OSGIKillbillEventDispatcher;
 public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKillbillEventHandler {
 
     @Override
-    public void handleKillbillEvent(final ExtBusEvent killbillEvent) {
+    public void handleKillbillEvent(final ExtBusEvent killbillEvent) { //todo implement
         log.info("Received event {} for object id {} of type {}",
                 killbillEvent.getEventType(),
                 killbillEvent.getObjectId(),
