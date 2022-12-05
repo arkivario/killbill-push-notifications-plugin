@@ -15,7 +15,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="event_type" type="varchar(30)" defaultValue="ALL">
+            <column name="event_type" type="varchar(30)">
                 <constraints nullable="false"/>
             </column>
 
