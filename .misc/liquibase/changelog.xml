@@ -28,4 +28,10 @@
         </modifySql>
     </changeSet>
 
+    <changeSet id="002_config_table_index" author="smbd">
+        <createIndex tableName="advancedpush_config" indexName="advancedpush_config_idx" unique="false">
+            <column name="tenant_id"/>
+            <column name="event_type"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
