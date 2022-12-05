@@ -84,6 +84,42 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.14.15</version>
+                <configuration>
+                    <jdbc>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <url>${db.url}</url>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <user>${db.username}</user>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <password>${db.password}</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <includes>advancedpush_config</includes>
+                            <inputSchema>killbill</inputSchema>
+                        </database>
+                        <generate>
+                            <records>true</records>
+                        </generate>
+                        <target>
+                            <packageName>org.example.killbill.plugin.advancedpush.persist.domain</packageName>
+                            <directory>target/generated-sources/jooq</directory>
+                        </target>
+                    </generator>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.mariadb.jdbc</groupId>
+                        <artifactId>mariadb-java-client</artifactId>
+                        <version>2.7.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 </project>
