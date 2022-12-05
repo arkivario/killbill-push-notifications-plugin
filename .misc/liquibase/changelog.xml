@@ -21,6 +21,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <modifySql dbms="mariadb">
+            <append value="CHARACTER SET utf8 COLLATE utf8_bin"/>
+        </modifySql>
     </changeSet>
 
 </databaseChangeLog>
