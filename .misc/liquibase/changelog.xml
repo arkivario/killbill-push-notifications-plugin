@@ -15,7 +15,9 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="event_type" type="varchar(30)" defaultValue="ALL"/>
+            <column name="event_type" type="varchar(30)" defaultValue="ALL">
+                <constraints nullable="false"/>
+            </column>
 
             <column name="callback_url" type="varchar(255)">
                 <constraints nullable="false"/>
