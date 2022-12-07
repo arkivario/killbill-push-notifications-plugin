@@ -28,7 +28,7 @@ public class CallbacksDao extends PluginDao {
                 conn -> using(conn, dialect, settings)
                         .selectFrom(ADVANCEDPUSH_CONFIG)
                         .where(field(TENANT_ID).equal(kbTenantId.toString()))
-                            .and(field(EVENT_TYPE).equal(eventType))
+                            .and(field(EVENT_TYPE).equal(eventType.toString()))
                         .fetch()
                         .map(AdvancedpushConfigRecord::getCallbackUrl)
         );
