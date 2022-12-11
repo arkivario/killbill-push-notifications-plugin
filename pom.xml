@@ -18,6 +18,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <killbill.version>0.22.31</killbill.version>
     </properties>
 
     <dependencies>
@@ -30,6 +31,12 @@
         <dependency>
             <groupId>org.kill-bill.billing.plugin</groupId>
             <artifactId>killbill-plugin-api-notification</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kill-bill.billing</groupId>
+            <artifactId>killbill-jaxrs</artifactId>
             <scope>provided</scope>
         </dependency>
 
