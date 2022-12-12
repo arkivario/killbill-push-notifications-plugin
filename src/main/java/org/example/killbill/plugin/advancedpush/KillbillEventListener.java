@@ -115,8 +115,11 @@ public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKi
         try {
             response = future.get(timeoutSec, TimeUnit.SECONDS);
 
-        } catch (ExecutionException e) { //todo: deal with it
-            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            log.warn("Failed to push notification url='{}', tenantId='{}'. Cause's message: {}",
+                    url, tenantId, e.getCause().getMessage(), e);
+            // Retrying: https://docs.killbill.io/latest/notification_plugin.html#_retries
+            throw new NotificationPluginApiRetryException(e);
 
         } catch (InterruptedException e) {
             log.warn("Failed to push notification url='{}', tenantId='{}': Thread was interrupted.",
@@ -127,7 +130,6 @@ public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKi
         } catch (TimeoutException e) {
             log.warn("Failed to push notification url='{}', tenantId='{}': Request timed out.",
                     url, tenantId, e);
-            // Retrying: https://docs.killbill.io/latest/notification_plugin.html#_retries
             throw new NotificationPluginApiRetryException(e);
         }
 
