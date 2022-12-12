@@ -125,7 +125,7 @@ public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKi
             log.warn("Failed to push notification url='{}', tenantId='{}': Thread was interrupted.",
                     url, tenantId);
             Thread.currentThread().interrupt();
-            return;
+            throw new NotificationPluginApiRetryException(e);
 
         } catch (TimeoutException e) {
             log.warn("Failed to push notification url='{}', tenantId='{}': Request timed out.",
