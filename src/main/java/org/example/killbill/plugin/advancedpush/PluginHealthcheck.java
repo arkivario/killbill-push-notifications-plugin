@@ -15,14 +15,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PluginHealthcheck implements Healthcheck {
 
+    private static final String[] TYPE_TABLE = new String[]{"TABLE"};
+
     private final DataSource dataSource;
 
     @Override
     public HealthStatus getHealthStatus(@Nullable final Tenant tenant, @Nullable final Map properties) {
         try (Connection connection = dataSource.getConnection()) {
             ResultSet resultSet = connection.getMetaData().getTables(null, null,
-                            Tables.ADVANCEDPUSH_CONFIG.getName(),
-                            new String[]{"TABLE"});
+                            Tables.ADVANCEDPUSH_CONFIG.getName(), TYPE_TABLE);
 
             if (!resultSet.next()) {
                 resultSet.close();
