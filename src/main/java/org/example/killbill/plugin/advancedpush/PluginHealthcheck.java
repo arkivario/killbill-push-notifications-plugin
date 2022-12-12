@@ -22,18 +22,16 @@ public class PluginHealthcheck implements Healthcheck {
     @Override
     public HealthStatus getHealthStatus(@Nullable final Tenant tenant, @Nullable final Map properties) {
         try (Connection connection = dataSource.getConnection()) {
-            ResultSet resultSet = connection.getMetaData().getTables(null, null,
-                            Tables.ADVANCEDPUSH_CONFIG.getName(), TYPE_TABLE);
 
-            if (!resultSet.next()) {
-                resultSet.close();
-                return HealthStatus.unHealthy(String.format(
-                        "Current database schema '%s' does not contain the required table '%s'",
-                        connection.getSchema(), Tables.ADVANCEDPUSH_CONFIG.getName())
-                );
+            try (ResultSet resultSet = connection.getMetaData().getTables(null, null,
+                    Tables.ADVANCEDPUSH_CONFIG.getName(), TYPE_TABLE)) {
+                if (!resultSet.next()) {
+                    return HealthStatus.unHealthy(String.format(
+                            "Current database schema '%s' does not contain the required table '%s'",
+                            connection.getSchema(), Tables.ADVANCEDPUSH_CONFIG.getName())
+                    );
+                }
             }
-
-            resultSet.close();
             return HealthStatus.healthy();
 
         } catch (SQLException e) {
