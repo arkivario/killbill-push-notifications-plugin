@@ -1,6 +1,6 @@
-package org.example.killbill.plugin.advancedpush.persist.dao;
+package org.example.killbill.plugin.anotherpush.persist.dao;
 
-import org.example.killbill.plugin.advancedpush.persist.domain.tables.records.AdvancedpushConfigRecord;
+import org.example.killbill.plugin.anotherpush.persist.domain.tables.records.AnotherpushConfigRecord;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.plugin.dao.PluginDao;
 
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import static org.example.killbill.plugin.advancedpush.persist.domain.Tables.ADVANCEDPUSH_CONFIG;
+import static org.example.killbill.plugin.anotherpush.persist.domain.Tables.ANOTHERPUSH_CONFIG;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
 
@@ -26,11 +26,11 @@ public class CallbacksDao extends PluginDao {
     public List<String> retrieveCallbacks(final UUID kbTenantId, final ExtBusEventType eventType) throws SQLException {
         return execute(dataSource.getConnection(),
                 conn -> using(conn, dialect, settings)
-                        .selectFrom(ADVANCEDPUSH_CONFIG)
+                        .selectFrom(ANOTHERPUSH_CONFIG)
                         .where(field(TENANT_ID).equal(kbTenantId.toString()))
                             .and(field(EVENT_TYPE).equal(eventType.toString()))
                         .fetch()
-                        .map(AdvancedpushConfigRecord::getCallbackUrl)
+                        .map(AnotherpushConfigRecord::getCallbackUrl)
         );
     }
 
@@ -39,7 +39,7 @@ public class CallbacksDao extends PluginDao {
                                  final String callbackUrl) throws SQLException {
         execute(dataSource.getConnection(), conn -> {
             using(conn, dialect, settings).transaction(configuration -> using(configuration)
-                    .insertInto(ADVANCEDPUSH_CONFIG, field(TENANT_ID), field(EVENT_TYPE), field(CALLBACK_URL))
+                    .insertInto(ANOTHERPUSH_CONFIG, field(TENANT_ID), field(EVENT_TYPE), field(CALLBACK_URL))
                     .values(kbTenantId.toString(), eventType.toString(), callbackUrl)
                     .execute()
             );

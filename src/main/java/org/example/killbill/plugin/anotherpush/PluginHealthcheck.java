@@ -1,7 +1,7 @@
-package org.example.killbill.plugin.advancedpush;
+package org.example.killbill.plugin.anotherpush;
 
 import lombok.RequiredArgsConstructor;
-import org.example.killbill.plugin.advancedpush.persist.domain.Tables;
+import org.example.killbill.plugin.anotherpush.persist.domain.Tables;
 import org.killbill.billing.osgi.api.Healthcheck;
 import org.killbill.billing.tenant.api.Tenant;
 
@@ -24,11 +24,11 @@ public class PluginHealthcheck implements Healthcheck {
         try (Connection connection = dataSource.getConnection()) {
 
             try (ResultSet resultSet = connection.getMetaData().getTables(null, null,
-                    Tables.ADVANCEDPUSH_CONFIG.getName(), TYPE_TABLE)) {
+                    Tables.ANOTHERPUSH_CONFIG.getName(), TYPE_TABLE)) {
                 if (!resultSet.next()) {
                     return HealthStatus.unHealthy(String.format(
                             "Current database schema '%s' does not contain the required table '%s'",
-                            connection.getSchema(), Tables.ADVANCEDPUSH_CONFIG.getName())
+                            connection.getSchema(), Tables.ANOTHERPUSH_CONFIG.getName())
                     );
                 }
             }

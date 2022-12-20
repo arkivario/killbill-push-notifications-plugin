@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>org.example.killbill.plugin</groupId>
-    <artifactId>kb-advanced-push-notifications-plugin</artifactId>
+    <artifactId>kb-another-push-notifications-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -73,8 +73,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.17.2</version>
                 <configuration>
-                    <databaseChangeLogTableName>advancedpush_DATABASECHANGELOG</databaseChangeLogTableName>
-                    <databaseChangeLogLockTableName>advancedpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
+                    <databaseChangeLogTableName>anotherpush_DATABASECHANGELOG</databaseChangeLogTableName>
+                    <databaseChangeLogLockTableName>anotherpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
                     <!--suppress UnresolvedMavenProperty -->
                     <url>${db.url}</url>
                     <!--suppress UnresolvedMavenProperty -->
@@ -107,14 +107,14 @@
                     </jdbc>
                     <generator>
                         <database>
-                            <includes>advancedpush_config</includes>
+                            <includes>anotherpush_config</includes>
                             <inputSchema>killbill</inputSchema>
                         </database>
                         <generate>
                             <records>true</records>
                         </generate>
                         <target>
-                            <packageName>org.example.killbill.plugin.advancedpush.persist.domain</packageName>
+                            <packageName>org.example.killbill.plugin.anotherpush.persist.domain</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>

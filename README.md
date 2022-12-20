@@ -1,1 +1,1 @@
-# kb-advanced-push-notifications-plugin
+# kb-another-push-notifications-plugin

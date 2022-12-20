@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.advancedpush;
+package org.example.killbill.plugin.anotherpush;
 
 import org.jooby.Result;
 import org.jooby.mvc.GET;

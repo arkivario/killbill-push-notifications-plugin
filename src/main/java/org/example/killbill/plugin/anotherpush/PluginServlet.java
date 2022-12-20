@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.advancedpush;
+package org.example.killbill.plugin.anotherpush;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

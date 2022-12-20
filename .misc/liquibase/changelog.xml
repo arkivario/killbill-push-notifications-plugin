@@ -6,7 +6,7 @@
 		                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     
     <changeSet id="001_create_config_table" author="smbd">
-        <createTable tableName="advancedpush_config">
+        <createTable tableName="anotherpush_config">
             <column name="record_id" type="bigint unsigned" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -29,7 +29,7 @@
     </changeSet>
 
     <changeSet id="002_config_table_index" author="smbd">
-        <createIndex tableName="advancedpush_config" indexName="advancedpush_config_idx" unique="true">
+        <createIndex tableName="anotherpush_config" indexName="anotherpush_config_idx" unique="true">
             <column name="tenant_id"/>
             <column name="event_type"/>
         </createIndex>
