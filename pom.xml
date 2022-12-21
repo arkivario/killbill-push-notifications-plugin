@@ -89,7 +89,7 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.14.15</version>
+                <version>3.14.16</version>
                 <executions>
                     <execution>
                         <id>jooq-generate</id>
