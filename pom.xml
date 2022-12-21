@@ -66,15 +66,20 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.17.2</version>
+                <executions>
+                    <execution>
+                        <id>update-schema</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <databaseChangeLogTableName>anotherpush_DATABASECHANGELOG</databaseChangeLogTableName>
                     <databaseChangeLogLockTableName>anotherpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <url>${db.url}</url>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <username>${db.username}</username>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <password>${db.password}</password>
+                    <url>jdbc:h2:file:./target/temp.db;DATABASE_TO_UPPER=false</url>
+                    <username>sa</username>
                     <changeLogFile>.misc/liquibase/changelog.xml</changeLogFile>
                 </configuration>
                 <dependencies>
@@ -82,6 +87,11 @@
                         <groupId>org.mariadb.jdbc</groupId>
                         <artifactId>mariadb-java-client</artifactId>
                         <version>2.7.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.200</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -101,17 +111,13 @@
                 </executions>
                 <configuration>
                     <jdbc>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <url>${db.url}</url>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <user>${db.username}</user>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <password>${db.password}</password>
+                        <url>jdbc:h2:file:./target/temp.db</url>
+                        <user>sa</user>
                     </jdbc>
                     <generator>
                         <database>
                             <includes>anotherpush_config</includes>
-                            <inputSchema>killbill</inputSchema>
+                            <inputSchema>PUBLIC</inputSchema>
                         </database>
                         <generate>
                             <records>true</records>
@@ -127,6 +133,11 @@
                         <groupId>org.mariadb.jdbc</groupId>
                         <artifactId>mariadb-java-client</artifactId>
                         <version>2.7.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.200</version>
                     </dependency>
                 </dependencies>
             </plugin>
