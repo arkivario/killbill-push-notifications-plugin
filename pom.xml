@@ -69,12 +69,9 @@
                 <configuration>
                     <databaseChangeLogTableName>anotherpush_DATABASECHANGELOG</databaseChangeLogTableName>
                     <databaseChangeLogLockTableName>anotherpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <url>${db.url}</url>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <username>${db.username}</username>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <password>${db.password}</password>
+                    <url>${liquibase.url}</url>
+                    <username>${liquibase.username}</username>
+                    <password>${liquibase.password}</password>
                     <changeLogFile>.misc/liquibase/changelog.xml</changeLogFile>
                 </configuration>
                 <dependencies>
@@ -101,17 +98,14 @@
                 </executions>
                 <configuration>
                     <jdbc>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <url>${db.url}</url>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <user>${db.username}</user>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <password>${db.password}</password>
+                        <url>${jooq-codegen.jdbc.url}</url>
+                        <user>${jooq-codegen.jdbc.user}</user>
+                        <password>${jooq-codegen.jdbc.password}</password>
                     </jdbc>
                     <generator>
                         <database>
                             <includes>anotherpush_config</includes>
-                            <inputSchema>killbill</inputSchema>
+                            <inputSchema>${jooq-codegen.generator.database.inputSchema}</inputSchema>
                         </database>
                         <generate>
                             <records>true</records>
