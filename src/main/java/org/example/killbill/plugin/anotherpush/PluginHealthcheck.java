@@ -1,7 +1,7 @@
 package org.example.killbill.plugin.anotherpush;
 
 import lombok.RequiredArgsConstructor;
-import org.example.killbill.plugin.anotherpush.persist.domain.Tables;
+import org.example.killbill.plugin.anotherpush.persist.gen.Tables;
 import org.killbill.billing.osgi.api.Healthcheck;
 import org.killbill.billing.tenant.api.Tenant;
 
