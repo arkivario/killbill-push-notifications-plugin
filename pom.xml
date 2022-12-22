@@ -78,7 +78,7 @@
                 <configuration>
                     <databaseChangeLogTableName>anotherpush_DATABASECHANGELOG</databaseChangeLogTableName>
                     <databaseChangeLogLockTableName>anotherpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
-                    <url>jdbc:h2:file:./target/temp.db;DATABASE_TO_UPPER=false</url>
+                    <url>jdbc:h2:file:./target/temp.db;DATABASE_TO_UPPER=false;MODE=MySQL</url>
                     <username>sa</username>
                     <changeLogFile>.misc/liquibase/changelog.xml</changeLogFile>
                 </configuration>
@@ -118,6 +118,12 @@
                         <database>
                             <includes>anotherpush_config</includes>
                             <inputSchema>PUBLIC</inputSchema>
+                            <outputSchema>killbill</outputSchema>
+<!--                            <includePackages>false</includePackages>-->
+<!--                            <includeIndexes>false</includeIndexes>-->
+<!--                            <includePrimaryKeys>false</includePrimaryKeys>-->
+<!--                            <includeUniqueKeys>false</includeUniqueKeys>-->
+<!--                            <includeForeignKeys>false</includeForeignKeys>-->
                         </database>
                         <generate>
                             <records>true</records>
@@ -125,6 +131,7 @@
                         <target>
                             <packageName>org.example.killbill.plugin.anotherpush.persist.domain</packageName>
                             <directory>target/generated-sources/jooq</directory>
+<!--                            <directory>src/main/java</directory>-->
                         </target>
                     </generator>
                 </configuration>
