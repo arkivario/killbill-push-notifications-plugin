@@ -29,7 +29,7 @@
     </changeSet>
 
     <changeSet id="002_config_table_index" author="smbd">
-        <createIndex tableName="anotherpush_config" indexName="anotherpush_config_idx" unique="true">
+        <createIndex tableName="anotherpush_config" indexName="anotherpush_config_tenant_id_event_type" unique="true">
             <column name="tenant_id"/>
             <column name="event_type"/>
         </createIndex>
