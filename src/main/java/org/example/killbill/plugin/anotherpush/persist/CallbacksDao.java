@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anotherpush.persist.dao;
+package org.example.killbill.plugin.anotherpush.persist;
 
 import org.example.killbill.plugin.anotherpush.persist.gen.tables.records.AnotherpushConfigRecord;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
