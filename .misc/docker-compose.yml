@@ -6,6 +6,7 @@ services:
     image: killbill/killbill:0.22.32
     ports:
       - "8080:8080"
+      - "5005:12345"
     environment:
       - KILLBILL_DAO_URL=jdbc:mysql://db:3306/killbill
       - KILLBILL_DAO_USER=root
