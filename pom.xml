@@ -10,9 +10,9 @@
         <version>0.144.85</version>
     </parent>
 
-    <groupId>org.example.killbill.plugin</groupId>
-    <artifactId>kb-another-push-notifications-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>org.example.killbill.billing.plugin</groupId>
+    <artifactId>killbill-push-notifications-plugin</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
