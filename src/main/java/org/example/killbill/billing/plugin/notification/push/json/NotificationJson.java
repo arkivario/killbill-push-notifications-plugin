@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anotherpush.json;
+package org.example.killbill.billing.plugin.notification.push.json;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

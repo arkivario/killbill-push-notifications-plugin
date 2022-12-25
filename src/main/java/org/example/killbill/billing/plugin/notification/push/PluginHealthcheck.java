@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anotherpush;
+package org.example.killbill.billing.plugin.notification.push;
 
 import lombok.RequiredArgsConstructor;
 import org.example.killbill.plugin.anotherpush.persist.gen.Tables;

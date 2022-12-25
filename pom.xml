@@ -179,7 +179,7 @@
                             <records>true</records>
                         </generate>
                         <target>
-                            <packageName>org.example.killbill.plugin.anotherpush.persist.gen</packageName>
+                            <packageName>org.example.killbill.billing.plugin.notification.push.persist.gen</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>

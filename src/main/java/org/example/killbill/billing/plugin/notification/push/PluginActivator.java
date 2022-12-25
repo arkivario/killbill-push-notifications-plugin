@@ -1,6 +1,6 @@
-package org.example.killbill.plugin.anotherpush;
+package org.example.killbill.billing.plugin.notification.push;
 
-import org.example.killbill.plugin.anotherpush.persist.CallbacksDao;
+import org.example.killbill.billing.plugin.notification.push.persist.CallbacksDao;
 import org.killbill.billing.osgi.api.Healthcheck;
 import org.killbill.billing.osgi.api.OSGIPluginProperties;
 import org.killbill.billing.osgi.libs.killbill.KillbillActivatorBase;

@@ -1,4 +1,4 @@
-package org.example.killbill.plugin.anotherpush;
+package org.example.killbill.billing.plugin.notification.push;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

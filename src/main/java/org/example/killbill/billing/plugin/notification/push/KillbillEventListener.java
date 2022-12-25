@@ -1,12 +1,12 @@
-package org.example.killbill.plugin.anotherpush;
+package org.example.killbill.billing.plugin.notification.push;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import org.asynchttpclient.*;
-import org.example.killbill.plugin.anotherpush.json.NotificationJson;
-import org.example.killbill.plugin.anotherpush.persist.CallbacksDao;
+import org.example.killbill.billing.plugin.notification.push.json.NotificationJson;
+import org.example.killbill.billing.plugin.notification.push.persist.CallbacksDao;
 import org.killbill.billing.notification.plugin.api.ExtBusEvent;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.notification.plugin.api.NotificationPluginApiRetryException;
