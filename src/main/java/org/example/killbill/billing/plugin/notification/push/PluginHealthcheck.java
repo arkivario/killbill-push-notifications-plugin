@@ -1,5 +1,7 @@
 package org.example.killbill.billing.plugin.notification.push;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import org.example.killbill.billing.plugin.notification.push.dao.gen.Tables;
 import org.killbill.billing.osgi.api.Healthcheck;
@@ -19,7 +21,6 @@ public class PluginHealthcheck implements Healthcheck {
 
     private final DataSource dataSource;
 
-    // todo: there is no schemas in MariaDB - only catalogs, so current solution will always return 'null' for getSchema()
     @Override
     public HealthStatus getHealthStatus(@Nullable final Tenant tenant, @Nullable final Map properties) {
         try (Connection connection = dataSource.getConnection()) {
@@ -27,15 +28,19 @@ public class PluginHealthcheck implements Healthcheck {
             try (ResultSet resultSet = connection.getMetaData().getTables(null, null,
                     Tables.ANOTHERPUSH_CONFIG.getName(), TYPE_TABLE)) {
                 if (!resultSet.next()) {
-                    return HealthStatus.unHealthy(String.format(
-                            "Current database schema '%s' does not contain the required table '%s'",
-                            /*
-                             * A workaround to acquire the real connection object, because the wrapper object
-                             * (net.sf.log4jdbc.sql.jdbcapi.ConnectionSpy) throws a java.lang.AbstractMethodError
-                             * on method getSchema() in runtime.
-                             * */
-                            connection.getMetaData().getConnection().getSchema(), Tables.ANOTHERPUSH_CONFIG.getName())
-                    );
+                    return new HealthStatus(false, ImmutableMap.of(
+                            "message", "Required tables are missing",
+                            "details", ImmutableMap.of(
+                                    /*
+                                     * connection.getMetaData().getConnection(): this is a workaround to acquire
+                                     * the real connection object, because the wrapper object
+                                     * (net.sf.log4jdbc.sql.jdbcapi.ConnectionSpy) throws a java.lang.AbstractMethodError
+                                     * on method getSchema() at runtime.
+                                     * */
+                                    "catalogName", connection.getMetaData().getConnection().getCatalog(),
+                                    "schemaName", connection.getMetaData().getConnection().getSchema(),
+                                    "missingTables", ImmutableList.of(Tables.ANOTHERPUSH_CONFIG.getName())
+                            )));
                 }
             }
             return HealthStatus.healthy();
