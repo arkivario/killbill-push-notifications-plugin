@@ -28,7 +28,12 @@ public class PluginHealthcheck implements Healthcheck {
                 if (!resultSet.next()) {
                     return HealthStatus.unHealthy(String.format(
                             "Current database schema '%s' does not contain the required table '%s'",
-                            connection.getSchema(), Tables.ANOTHERPUSH_CONFIG.getName())
+                            /*
+                             * A workaround to acquire the real connection object, because the wrapper object
+                             * (net.sf.log4jdbc.sql.jdbcapi.ConnectionSpy) throws a java.lang.AbstractMethodError
+                             * on method getSchema() in runtime.
+                             * */
+                            connection.getMetaData().getConnection().getSchema(), Tables.ANOTHERPUSH_CONFIG.getName())
                     );
                 }
             }
