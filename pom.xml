@@ -13,8 +13,10 @@
     <groupId>org.example.killbill.billing.plugin</groupId>
     <artifactId>killbill-push-notifications-plugin</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
 
     <properties>
+        <osgi.private>org.example.killbill.billing.plugin.notification.push.*</osgi.private>
         <lombok.version>1.18.24</lombok.version>
     </properties>
 
@@ -205,6 +207,11 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
