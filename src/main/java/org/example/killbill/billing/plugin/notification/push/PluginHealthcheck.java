@@ -19,6 +19,7 @@ public class PluginHealthcheck implements Healthcheck {
 
     private final DataSource dataSource;
 
+    // todo: there is no schemas in MariaDB - only catalogs, so current solution will always return 'null' for getSchema()
     @Override
     public HealthStatus getHealthStatus(@Nullable final Tenant tenant, @Nullable final Map properties) {
         try (Connection connection = dataSource.getConnection()) {
