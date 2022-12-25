@@ -1,6 +1,6 @@
 package org.example.killbill.billing.plugin.notification.push.persist;
 
-import org.example.killbill.plugin.anotherpush.persist.gen.tables.records.AnotherpushConfigRecord;
+import org.example.killbill.billing.plugin.notification.push.persist.gen.tables.records.AnotherpushConfigRecord;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.plugin.dao.PluginDao;
 
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import static org.example.killbill.plugin.anotherpush.persist.gen.Tables.ANOTHERPUSH_CONFIG;
+import static org.example.killbill.billing.plugin.notification.push.persist.gen.Tables.ANOTHERPUSH_CONFIG;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
 
