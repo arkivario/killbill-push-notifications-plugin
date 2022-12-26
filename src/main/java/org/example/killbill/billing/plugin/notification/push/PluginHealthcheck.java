@@ -24,6 +24,15 @@ public class PluginHealthcheck implements Healthcheck {
     @Override
     public HealthStatus getHealthStatus(@Nullable final Tenant tenant, @Nullable final Map properties) {
         try (Connection connection = dataSource.getConnection()) {
+            /*
+             * connection.getMetaData().getConnection(): this is a workaround to acquire
+             * the real connection object, because the wrapper object
+             * (net.sf.log4jdbc.sql.jdbcapi.ConnectionSpy) throws a java.lang.AbstractMethodError
+             * on method getSchema() at runtime.
+             * */
+            final String catalogName = connection.getMetaData().getConnection().getCatalog();
+            // turns into "null" string in case of getSchema() returns null
+            final String schemaName = String.valueOf(connection.getMetaData().getConnection().getSchema());
 
             try (ResultSet resultSet = connection.getMetaData().getTables(null, null,
                     Tables.ANOTHERPUSH_CONFIG.getName(), TYPE_TABLE)) {
@@ -31,14 +40,8 @@ public class PluginHealthcheck implements Healthcheck {
                     return new HealthStatus(false, ImmutableMap.of(
                             "message", "Required tables are missing",
                             "details", ImmutableMap.of(
-                                    /*
-                                     * connection.getMetaData().getConnection(): this is a workaround to acquire
-                                     * the real connection object, because the wrapper object
-                                     * (net.sf.log4jdbc.sql.jdbcapi.ConnectionSpy) throws a java.lang.AbstractMethodError
-                                     * on method getSchema() at runtime.
-                                     * */
-                                    "catalogName", connection.getMetaData().getConnection().getCatalog(),
-                                    "schemaName", connection.getMetaData().getConnection().getSchema(),
+                                    "catalogName", catalogName,
+                                    "schemaName", schemaName,
                                     "missingTables", ImmutableList.of(Tables.ANOTHERPUSH_CONFIG.getName())
                             )));
                 }
