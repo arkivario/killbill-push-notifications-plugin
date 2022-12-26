@@ -52,24 +52,20 @@ public class PluginActivator extends KillbillActivatorBase {
     }
 
     private void registerHealthcheck(final BundleContext context, final Healthcheck healthcheck) {
-        final Hashtable<String, String> props = new Hashtable<String, String>();
+        final Hashtable<String, String> props = new Hashtable<>();
         props.put(OSGIPluginProperties.PLUGIN_NAME_PROP, PLUGIN_NAME);
         registrar.registerService(context, Healthcheck.class, healthcheck, props);
     }
 
     private void registerServlet(final BundleContext context, final Servlet servlet) {
-        final Hashtable<String, String> props = new Hashtable<String, String>();
+        final Hashtable<String, String> props = new Hashtable<>();
         props.put(OSGIPluginProperties.PLUGIN_NAME_PROP, PLUGIN_NAME);
         registrar.registerService(context, Servlet.class, servlet, props);
     }
 
     private void registerHandlers() {
-        dispatcher.registerEventHandlers(
-                new OSGIKillbillEventDispatcher.OSGIFrameworkEventHandler() {
-                    @Override
-                    public void started() {
-                        dispatcher.registerEventHandlers(killbillEventHandler);
-                    }
-                });
+        dispatcher.registerEventHandlers((OSGIKillbillEventDispatcher.OSGIFrameworkEventHandler) () ->
+                dispatcher.registerEventHandlers(killbillEventHandler)
+        );
     }
 }
