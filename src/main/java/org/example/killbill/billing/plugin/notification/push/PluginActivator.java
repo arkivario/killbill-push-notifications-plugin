@@ -15,7 +15,7 @@ import java.util.Hashtable;
 
 public class PluginActivator extends KillbillActivatorBase {
 
-    public static final String PLUGIN_NAME = "another-push-notification-plugin";
+    public static final String PLUGIN_NAME = "push-notifications";
 
     private OSGIKillbillEventDispatcher.OSGIKillbillEventHandler killbillEventHandler;
 
