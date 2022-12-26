@@ -137,8 +137,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.17.2</version>
                 <configuration>
-                    <databaseChangeLogTableName>anotherpush_DATABASECHANGELOG</databaseChangeLogTableName>
-                    <databaseChangeLogLockTableName>anotherpush_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
+                    <databaseChangeLogTableName>pushnotifications_DATABASECHANGELOG</databaseChangeLogTableName>
+                    <databaseChangeLogLockTableName>pushnotifications_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
                     <url>${liquibase.url}</url>
                     <username>${liquibase.username}</username>
                     <password>${liquibase.password}</password>
@@ -174,7 +174,7 @@
                     </jdbc>
                     <generator>
                         <database>
-                            <includes>anotherpush_config</includes>
+                            <includes>pushnotifications_config</includes>
                             <inputSchema>${jooq-codegen.generator.database.inputSchema}</inputSchema>
                         </database>
                         <generate>

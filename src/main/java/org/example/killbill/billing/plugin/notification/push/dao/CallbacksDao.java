@@ -1,6 +1,6 @@
 package org.example.killbill.billing.plugin.notification.push.dao;
 
-import org.example.killbill.billing.plugin.notification.push.dao.gen.tables.records.AnotherpushConfigRecord;
+import org.example.killbill.billing.plugin.notification.push.dao.gen.tables.records.PushnotificationsConfigRecord;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.plugin.dao.PluginDao;
 
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import static org.example.killbill.billing.plugin.notification.push.dao.gen.Tables.ANOTHERPUSH_CONFIG;
+import static org.example.killbill.billing.plugin.notification.push.dao.gen.Tables.PUSHNOTIFICATIONS_CONFIG;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
 
@@ -26,11 +26,11 @@ public class CallbacksDao extends PluginDao {
     public List<String> retrieveCallbacks(final UUID kbTenantId, final ExtBusEventType eventType) throws SQLException {
         return execute(dataSource.getConnection(),
                 conn -> using(conn, dialect, settings)
-                        .selectFrom(ANOTHERPUSH_CONFIG)
+                        .selectFrom(PUSHNOTIFICATIONS_CONFIG)
                         .where(field(TENANT_ID).equal(kbTenantId.toString()))
                             .and(field(EVENT_TYPE).equal(eventType.toString()))
                         .fetch()
-                        .map(AnotherpushConfigRecord::getCallbackUrl)
+                        .map(PushnotificationsConfigRecord::getCallbackUrl)
         );
     }
 
@@ -39,7 +39,7 @@ public class CallbacksDao extends PluginDao {
                                  final String callbackUrl) throws SQLException {
         execute(dataSource.getConnection(), conn -> {
             using(conn, dialect, settings).transaction(configuration -> using(configuration)
-                    .insertInto(ANOTHERPUSH_CONFIG, field(TENANT_ID), field(EVENT_TYPE), field(CALLBACK_URL))
+                    .insertInto(PUSHNOTIFICATIONS_CONFIG, field(TENANT_ID), field(EVENT_TYPE), field(CALLBACK_URL))
                     .values(kbTenantId.toString(), eventType.toString(), callbackUrl)
                     .execute()
             );

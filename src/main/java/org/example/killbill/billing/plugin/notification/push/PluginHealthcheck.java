@@ -35,14 +35,14 @@ public class PluginHealthcheck implements Healthcheck {
             final String schemaName = String.valueOf(connection.getMetaData().getConnection().getSchema());
 
             try (ResultSet resultSet = connection.getMetaData().getTables(null, null,
-                    Tables.ANOTHERPUSH_CONFIG.getName(), TYPE_TABLE)) {
+                    Tables.PUSHNOTIFICATIONS_CONFIG.getName(), TYPE_TABLE)) {
                 if (!resultSet.next()) {
                     return new HealthStatus(false, ImmutableMap.of(
                             "message", "Required tables are missing",
                             "details", ImmutableMap.of(
                                     "catalogName", catalogName,
                                     "schemaName", schemaName,
-                                    "missingTables", ImmutableList.of(Tables.ANOTHERPUSH_CONFIG.getName())
+                                    "missingTables", ImmutableList.of(Tables.PUSHNOTIFICATIONS_CONFIG.getName())
                             )));
                 }
             }
