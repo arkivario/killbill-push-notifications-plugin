@@ -35,6 +35,7 @@ public class PluginActivator extends KillbillActivatorBase {
                 .withRouteClass(PluginServlet.class)
                 .withRouteClass(PluginHealthcheckServlet.class)
                 .withService(healthcheck)
+                .withService(killbillAPI.getTenantUserApi())
                 .build();
         final HttpServlet httpServlet = PluginApp.createServlet(pluginApp);
         registerServlet(context, httpServlet);
