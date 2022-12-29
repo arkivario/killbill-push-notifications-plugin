@@ -3,9 +3,10 @@ volumes:
   db:
 services:
   killbill:
-    image: killbill/killbill:0.22.31
+    image: killbill/killbill:0.22.32
     ports:
       - "8080:8080"
+      - "5005:12345"
     environment:
       - KILLBILL_DAO_URL=jdbc:mysql://db:3306/killbill
       - KILLBILL_DAO_USER=root
@@ -20,12 +21,12 @@ services:
       - KAUI_CONFIG_DAO_PASSWORD=killbill
       - KAUI_KILLBILL_URL=http://killbill:8080
   db:
-    image: killbill/mariadb:0.23
+    image: killbill/mariadb:0.22
     volumes:
       - type: volume
         source: db
         target: /var/lib/mysql
-    expose:
-      - "3306"
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=killbill
