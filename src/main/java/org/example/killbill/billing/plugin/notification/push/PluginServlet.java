@@ -28,17 +28,18 @@ import java.util.Optional;
 @Path("/")
 public class PluginServlet {
 
-    private static final Result NO_TENANT_ERROR = Results.with(
-            Collections.singletonMap(
-                    "message", "Make sure to set the X-Killbill-ApiKey and X-Killbill-ApiSecret headers"
-            ),
-            Status.UNAUTHORIZED
+    private static final Result NO_TENANT_401 = Results.with(
+        Collections.singletonMap(
+            "message", "Make sure to set the X-Killbill-ApiKey and X-Killbill-ApiSecret headers"
+        ),
+        Status.UNAUTHORIZED //todo: 403??
     );
-    private static final Result CALLBACKS_ALREADY_SET_USING_KILLBILL_ERROR = Results.with(
-            Collections.singletonMap(
-                    "message", "Callbacks already set using KillBill's push notification mechanism. Clear it before using this plugin."
-            ),
-            Status.BAD_REQUEST
+    private static final Result CALLBACKS_ALREADY_SET_USING_KILLBILL_400 = Results.with(
+        Collections.singletonMap(
+            "message",
+            "Callbacks already set using KillBill's push notification mechanism. Clear it before using this plugin."
+        ),
+        Status.BAD_REQUEST //todo: another 4xx code??
     );
 
     private final TenantUserApi tenantUserApi;
@@ -62,7 +63,7 @@ public class PluginServlet {
     public Result registerCallbacks(@Local @Named("killbill_tenant") final Tenant tenant,
                                     @Body final PostCallbacksDto body) {
         if (Objects.isNull(tenant)) {
-            return NO_TENANT_ERROR;
+            return NO_TENANT_401;
         }
 
         try {
@@ -71,7 +72,7 @@ public class PluginServlet {
                     new PluginTenantContext(null, tenant.getId())
             );
             if (!nativeKillbillCallbacks.isEmpty())
-                return CALLBACKS_ALREADY_SET_USING_KILLBILL_ERROR;
+                return CALLBACKS_ALREADY_SET_USING_KILLBILL_400;
         } catch (TenantApiException e) {
             log.warn("Tenant API call failed.", e);
             return Results.with(Collections.singletonMap("message", e.getMessage()), Status.SERVER_ERROR);
