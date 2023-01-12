@@ -33,6 +33,7 @@ public class PluginActivator extends KillbillActivatorBase {
         // Register a servlet
         final PluginApp pluginApp = new PluginAppBuilder(PLUGIN_NAME, killbillAPI, dataSource, clock, configProperties)
                 .withRouteClass(PluginServlet.class)
+                .withService(new CallbacksDao(dataSource.getDataSource()))
                 .withRouteClass(PluginHealthcheckServlet.class)
                 .withService(healthcheck)
                 .build();
