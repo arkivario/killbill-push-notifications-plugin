@@ -9,11 +9,11 @@ import org.jooby.Results;
 import org.jooby.Status;
 import org.jooby.mvc.*;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
+import org.killbill.billing.osgi.libs.killbill.OSGIKillbillAPI;
 import org.killbill.billing.plugin.api.PluginTenantContext;
 import org.killbill.billing.tenant.api.Tenant;
 import org.killbill.billing.tenant.api.TenantApiException;
 import org.killbill.billing.tenant.api.TenantKV;
-import org.killbill.billing.tenant.api.TenantUserApi;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,7 +44,7 @@ public class PluginServlet {
         Status.BAD_REQUEST //todo: another 4xx code??
     );
 
-    private final TenantUserApi tenantUserApi;
+    private final OSGIKillbillAPI killbillAPI;
     private final CallbacksDao dao;
 
     @GET
@@ -70,7 +70,7 @@ public class PluginServlet {
         }
 
         try {
-            List<String> killbillCallbacks = tenantUserApi.getTenantValuesForKey(
+            List<String> killbillCallbacks = killbillAPI.getTenantUserApi().getTenantValuesForKey(
                     String.valueOf(TenantKV.TenantKey.PUSH_NOTIFICATION_CB),
                     new PluginTenantContext(null, tenant.getId())
             );
