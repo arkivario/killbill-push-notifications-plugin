@@ -8,6 +8,7 @@ import org.jooby.Result;
 import org.jooby.Results;
 import org.jooby.Status;
 import org.jooby.mvc.*;
+import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.plugin.api.PluginTenantContext;
 import org.killbill.billing.tenant.api.Tenant;
 import org.killbill.billing.tenant.api.TenantApiException;
@@ -17,10 +18,11 @@ import org.killbill.billing.tenant.api.TenantUserApi;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -46,46 +48,65 @@ public class PluginServlet {
     private final CallbacksDao dao;
 
     @GET
-    public void ping(@Local @Named("killbill_tenant") final Optional<Tenant> tenant) {
-        log.info("Hello from KillBill Another push notification plugin");
-
-        if(tenant != null && tenant.isPresent() ) {
-            log.info("tenant is available");
-            Tenant t1 = tenant.get();
-            log.info("tenant id:"+t1.getId());
+    public Result getAll(@Local @Named("killbill_tenant") final Tenant tenant) {
+        if (Objects.isNull(tenant)) {
+            return Results.ok(); //todo: temporary, need return all callbacks for all tenants
         }
-        else {
-            log.info("tenant is not available");
+
+        try {
+            Map<ExtBusEventType, List<String>> result = dao.retrieveCallbacks(tenant.getId());
+            return Results.ok(result);
+        } catch (SQLException e) {
+            log.warn("Failed to retrieve callbacks for tenant: {}", tenant.getId(), e);
+            return Results.with(Collections.singletonMap("message", e.getMessage()), Status.SERVER_ERROR);
         }
     }
 
     @POST
-    public Result registerCallbacks(@Local @Named("killbill_tenant") final Tenant tenant,
-                                    @Body final PostCallbacksDto body) {
+    public Result postCallbacks(@Local @Named("killbill_tenant") final Tenant tenant,
+                                @Body final PostCallbacksDto body) {
         if (Objects.isNull(tenant)) {
             return NO_TENANT_401;
         }
 
         try {
-            List<String> nativeKillbillCallbacks = tenantUserApi.getTenantValuesForKey(
+            List<String> killbillCallbacks = tenantUserApi.getTenantValuesForKey(
                     String.valueOf(TenantKV.TenantKey.PUSH_NOTIFICATION_CB),
                     new PluginTenantContext(null, tenant.getId())
             );
-            if (!nativeKillbillCallbacks.isEmpty())
+            if (!Objects.isNull(killbillCallbacks) && !killbillCallbacks.isEmpty())
                 return CALLBACKS_ALREADY_SET_USING_KILLBILL_400;
         } catch (TenantApiException e) {
+            /*
+            * Actually is never thrown when calling getTenantValuesForKey with KillBill's default implementation
+            * org.killbill.billing.tenant.api.user.DefaultTenantUserApi
+            * */
             log.warn("Tenant API call failed.", e);
             return Results.with(Collections.singletonMap("message", e.getMessage()), Status.SERVER_ERROR);
         }
 
-
+        try {
+            dao.registerCallbacks(tenant.getId(), body.getEventTypes(), body.getCallbackUrl());
+        } catch (SQLException e) {
+            log.warn("Unable to save configuration.", e);
+            return Results.with(Collections.singletonMap("message", e.getMessage()), Status.SERVER_ERROR);
+        }
 
         return Results.with(Status.CREATED);
     }
     @DELETE
     public Result deleteCallback(@Local @Named("killbill_tenant") final Tenant tenant) {
+        if (Objects.isNull(tenant)) {
+            return NO_TENANT_401;
+        }
+
+        try {
+            dao.clearCallbacks(tenant.getId());
+        } catch (SQLException e) {
+            log.warn("Unable to clear callbacks for tenant {}.", tenant.getId(), e);
+            return Results.with(Collections.singletonMap("message", e.getMessage()), Status.SERVER_ERROR);
+        }
+
         return Results.with(Status.NO_CONTENT);
     }
-
-
 }
