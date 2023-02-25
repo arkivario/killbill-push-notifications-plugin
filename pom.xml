@@ -157,7 +157,7 @@
                     <url>${liquibase.url}</url>
                     <username>${liquibase.username}</username>
                     <password>${liquibase.password}</password>
-                    <changeLogFile>.misc/liquibase/changelog.xml</changeLogFile>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
                 </configuration>
                 <dependencies>
                     <dependency>
