@@ -24,7 +24,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <modifySql dbms="mariadb">
+        <modifySql dbms="mysql,mariadb">
             <append value=" ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_bin"/>
         </modifySql>
     </changeSet>
