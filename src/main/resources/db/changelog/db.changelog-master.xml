@@ -25,7 +25,7 @@
             </column>
         </createTable>
         <modifySql dbms="mariadb">
-            <append value="CHARACTER SET utf8 COLLATE utf8_bin"/>
+            <append value=" ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_bin"/>
         </modifySql>
     </changeSet>
 
