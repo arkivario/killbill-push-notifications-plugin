@@ -43,15 +43,6 @@ public class PluginActivator extends KillbillActivatorBase {
         registerHandlers();
     }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        super.stop(context);
-
-        if (killbillEventHandler instanceof KillbillEventListener) {
-            ((KillbillEventListener) killbillEventHandler).shutdown();
-        }
-    }
-
     private void registerHealthcheck(final BundleContext context, final Healthcheck healthcheck) {
         final Hashtable<String, String> props = new Hashtable<>();
         props.put(OSGIPluginProperties.PLUGIN_NAME_PROP, PLUGIN_NAME);

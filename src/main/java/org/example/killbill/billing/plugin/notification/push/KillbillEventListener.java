@@ -4,36 +4,37 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.*;
-import org.example.killbill.billing.plugin.notification.push.json.NotificationJson;
 import org.example.killbill.billing.plugin.notification.push.dao.CallbacksDao;
+import org.example.killbill.billing.plugin.notification.push.json.NotificationJson;
 import org.killbill.billing.notification.plugin.api.ExtBusEvent;
 import org.killbill.billing.notification.plugin.api.ExtBusEventType;
 import org.killbill.billing.notification.plugin.api.NotificationPluginApiRetryException;
 import org.killbill.billing.osgi.libs.killbill.OSGIKillbillEventDispatcher;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKillbillEventHandler {
 
-    private static final int TIMEOUT_NOTIFICATION_SEC = 15; //todo: configure
+    private static final Duration TIMEOUT_NOTIFICATION = Duration.ofSeconds(15); //todo: configure
 
-    private final AsyncHttpClient httpClient;
+    private final HttpClient httpClient;
     private final CallbacksDao dao;
     private final ObjectMapper objectMapper;
 
     public KillbillEventListener(CallbacksDao dao) {
-        this.httpClient = new DefaultAsyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
-                .setConnectTimeout(TIMEOUT_NOTIFICATION_SEC * 1000)
-                .setRequestTimeout(TIMEOUT_NOTIFICATION_SEC * 1000).build());
+        this.httpClient = HttpClient.newBuilder()
+                .connectTimeout(TIMEOUT_NOTIFICATION)
+                .build();
         this.dao = dao;
         //todo: find out if KillBill customize objectMapper for it's PushNotificationListener
         this.objectMapper = new ObjectMapper();
@@ -64,18 +65,6 @@ public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKi
         }
     }
 
-    public void shutdown() {
-        try {
-            httpClient.close();
-        } catch (IOException e) {
-            /*
-             * IOException actually is never thrown while closing a DefaultAsyncHttpClient.
-             * See https://github.com/AsyncHttpClient/async-http-client/blob/7a370af58dc8895a27a14d0a81af2a3b91930651/client/src/main/java/org/asynchttpclient/DefaultAsyncHttpClient.java#L117
-             * */
-            log.warn("An I/O error occurred while closing http client", e);
-        }
-    }
-
     private List<String> getCallbacksFor(final UUID kbTenantId, final ExtBusEventType eventType) throws SQLException {
         log.debug("Retrieving callbacks for tenant '{}' and event type '{}'", kbTenantId, eventType);
 
@@ -93,47 +82,39 @@ public class KillbillEventListener implements OSGIKillbillEventDispatcher.OSGIKi
         final String body = objectMapper.writeValueAsString(notification);
 
         for (final String callback : callbacks) {
-            doPost(tenantId, callback, body, TIMEOUT_NOTIFICATION_SEC);
+            doPost(tenantId, callback, body);
         }
     }
 
-    private void doPost(final UUID tenantId, final String url, final String body, final int timeoutSec) {
+    private void doPost(final UUID tenantId, final String url, final String body) {
         log.info("Sending push notification url='{}', body='{}'", url, body);
 
-        final BoundRequestBuilder builder = httpClient.preparePost(url);
-        builder.setBody(body); //todo: body null check?
-        builder.addHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+        final var request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header(HttpHeaders.USER_AGENT, "KillBill/1.0")
+                .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
+                .timeout(TIMEOUT_NOTIFICATION)
+                .POST(HttpRequest.BodyPublishers.ofString(body)) //todo: body null check?
+                .build();
 
-        final ListenableFuture<Response> future = builder.execute(new AsyncCompletionHandler<Response>() {
-            @Override
-            public Response onCompleted(final Response response) throws Exception {
-                return response;
-            }
-        });
-
-        final Response response;
+        final HttpResponse<Void> response;
         try {
-            response = future.get(timeoutSec, TimeUnit.SECONDS);
-
-        } catch (ExecutionException e) {
-            log.warn("Failed to push notification url='{}', tenantId='{}'. Cause's message: {}",
-                    url, tenantId, e.getCause().getMessage(), e);
-            // Retrying: https://docs.killbill.io/latest/notification_plugin.html#_retries
-            throw new NotificationPluginApiRetryException(e);
+            response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
 
         } catch (InterruptedException e) {
             log.warn("Failed to push notification url='{}', tenantId='{}': Thread was interrupted.",
                     url, tenantId);
             Thread.currentThread().interrupt();
+            // Retrying: https://docs.killbill.io/latest/notification_plugin.html#_retries
             throw new NotificationPluginApiRetryException(e);
 
-        } catch (TimeoutException e) {
-            log.warn("Failed to push notification url='{}', tenantId='{}': Request timed out.",
+        } catch (IOException e) {
+            log.warn("Failed to push notification url='{}', tenantId='{}': I/O exception.",
                     url, tenantId, e);
             throw new NotificationPluginApiRetryException(e);
         }
 
-        if (!(response.getStatusCode() >= 200 && response.getStatusCode() < 300)) {
+        if (!(response.statusCode() >= 200 && response.statusCode() < 300)) {
             throw new NotificationPluginApiRetryException(); //todo: would it be DEFAULT_RETRY_SCHEDULE or not?
         }
     }
