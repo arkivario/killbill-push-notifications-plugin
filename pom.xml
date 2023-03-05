@@ -141,11 +141,32 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>4.17.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq-codegen-maven</artifactId>
+                    <version>3.15.12</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.h2database</groupId>
+                            <artifactId>h2</artifactId>
+                            <version>2.1.214</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.17.2</version>
                 <configuration>
                     <databaseChangeLogTableName>pushnotifications_DATABASECHANGELOG</databaseChangeLogTableName>
                     <databaseChangeLogLockTableName>pushnotifications_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
@@ -166,7 +187,6 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.14.16</version>
                 <executions>
                     <execution>
                         <id>jooq-generate</id>
