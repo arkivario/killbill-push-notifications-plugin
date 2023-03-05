@@ -1,1 +1,1 @@
-# kb-another-push-notifications-plugin
+# killbill-push-notifications-plugin
