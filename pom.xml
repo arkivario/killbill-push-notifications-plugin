@@ -182,26 +182,6 @@
 
         <plugins>
             <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <configuration>
-                    <databaseChangeLogTableName>pushnotifications_DATABASECHANGELOG</databaseChangeLogTableName>
-                    <databaseChangeLogLockTableName>pushnotifications_DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
-                    <url>${liquibase.url}</url>
-                    <username>${liquibase.username}</username>
-                    <password>${liquibase.password}</password>
-                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.mariadb.jdbc</groupId>
-                        <artifactId>mariadb-java-client</artifactId>
-                        <version>2.7.4</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
                 <executions>
@@ -262,4 +242,33 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>mysql</id>
+            <!-- embedded MySQL only available for Linux and MacOS environments -->
+            <!-- (see org.kill-bill.testing:testing-mysql-server) -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <configuration>
+                            <url>offline:mariadb?catalog=killbill&amp;outputLiquibaseSql=none&amp;changeLogFile=target/generated-test-resources/org/killbill/billing/beatrix/databasechangelog.csv</url>
+                            <migrationSqlOutputFile>target/generated-test-resources/org/killbill/billing/beatrix/ddl.sql</migrationSqlOutputFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-ddl</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>updateSQL</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
