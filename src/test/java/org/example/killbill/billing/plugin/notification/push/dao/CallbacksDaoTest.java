@@ -15,17 +15,17 @@ import java.sql.SQLException;
 * */
 public class CallbacksDaoTest {
 
-    @BeforeSuite(groups = "dbi")
+    @BeforeSuite(groups = "slow")
     public void setUpDB() throws SQLException, IOException {
         PlatformDBTestingHelper.get().start();
     }
 
-    @BeforeMethod(groups = "dbi")
+    @BeforeMethod(groups = "slow")
     public void resetDB() throws IOException {
         PlatformDBTestingHelper.get().getInstance().cleanupAllTables();
     }
 
-    @AfterSuite(groups = "dbi")
+    @AfterSuite(groups = "slow")
     public void tearDownDB() throws IOException {
         PlatformDBTestingHelper.get().getInstance().stop();
     }
