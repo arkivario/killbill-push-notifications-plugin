@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class CallbacksDaoTest {
 
     @BeforeSuite(groups = "dbi")
-    public void setupDBI() throws SQLException, IOException {
+    public void setUpDB() throws SQLException, IOException {
         PlatformDBTestingHelper.get().start();
     }
 
@@ -26,7 +26,7 @@ public class CallbacksDaoTest {
     }
 
     @AfterSuite(groups = "dbi")
-    public void tearDown() throws IOException {
+    public void tearDownDB() throws IOException {
         PlatformDBTestingHelper.get().getInstance().stop();
     }
 }
