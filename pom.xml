@@ -254,8 +254,8 @@
                         <groupId>org.liquibase</groupId>
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <configuration>
-                            <url>offline:mariadb?catalog=killbill&amp;outputLiquibaseSql=none&amp;changeLogFile=target/generated-test-resources/org/killbill/billing/beatrix/databasechangelog.csv</url>
-                            <migrationSqlOutputFile>target/generated-test-resources/org/killbill/billing/beatrix/ddl.sql</migrationSqlOutputFile>
+                            <url>offline:mariadb?catalog=killbill&amp;outputLiquibaseSql=none&amp;changeLogFile=${project.build.testOutputDirectory}/org/killbill/billing/beatrix/databasechangelog.csv</url>
+                            <migrationSqlOutputFile>${project.build.testOutputDirectory}/org/killbill/billing/beatrix/ddl.sql</migrationSqlOutputFile>
                         </configuration>
                         <executions>
                             <execution>
