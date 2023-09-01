@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- todo: move to src/main/resources/db/changelog/db.changelog-master.yaml; try yaml format -->
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-		                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    
+		                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ALL_OBJECTS"
+>
+
     <changeSet id="001_create_config_table" author="smbd">
         <createTable tableName="pushnotifications_config">
             <column name="record_id" type="bigint unsigned" autoIncrement="true">
@@ -23,8 +26,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <modifySql dbms="mariadb">
-            <append value="CHARACTER SET utf8 COLLATE utf8_bin"/>
+        <modifySql dbms="mysql,mariadb">
+            <append value=" ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_bin"/>
         </modifySql>
     </changeSet>
 
